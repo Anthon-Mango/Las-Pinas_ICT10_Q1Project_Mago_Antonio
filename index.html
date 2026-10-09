@@ -96,35 +96,34 @@
     <label for="quantity">Stock Quantity</label>
     <input type="number" id="quantity" placeholder="Example: 20">
 
-    <button id="generate">Generate SKU</button>
+    <button py-click="SKU_generator">Generate SKU</button>
 
     <div id="sku_output">
         Total Cost
     </div>
 
+    <script type="py">
 
-    <h2>Order</h2>
+        from pyscript import display, document
+        
+def SKU_generator(e):
 
-    <div class="product">
-        <input type="checkbox" id="Pizza" value="150">
-        <label for="Pizza">Pizza - ₱150</label>
-    </div>
 
-    <div class="product">
-        <input type="checkbox" id="Apples" value="80">
-        <label for="Apples">Apples - ₱80</label>
-    </div>
+        category = document.getElementbyID('category').value
+        product_name = document.getElementbyID('product_name').value
+        stock = document.getElementbyID('quantity').value
 
-    <div class="product">
-        <input type="checkbox" id="Soda" value="50">
-        <label for="Soda">Soda - ₱50</label>
-    </div>
+    sku = category[:3].upper() + "-" + product_name[:4].upper() + "-" + str(stock)
 
-    <div class="product">
-        <input type="checkbox" id="Fries" value="70">
-        <label for="Fries">Fries - ₱70</label>
-    </div>
+    display("SKU: ", sku, target='sku_output')
+        
+    </script>
 
-    <div class="product">
-        <input type="checkbox" id="Burgers" value="120">
-        <label for="Burgers">Burgers - ₱90</label>
+
+
+
+
+    
+</div>
+</body>
+</html>
