@@ -1,7 +1,14 @@
+```html
 <!DOCTYPE html>
 <html>
 <head>
     <title>Food and Drinks</title>
+
+    <!-- PyScript -->
+    <link rel="stylesheet"
+        href="https://pyscript.net/releases/2024.1.1/core.css">
+    <script type="module"
+        src="https://pyscript.net/releases/2024.1.1/core.js"></script>
 
     <style>
         body {
@@ -12,10 +19,12 @@
 
         .container {
             width: 500px;
+            max-width: 100%;
             margin: auto;
             background-color: white;
             padding: 30px;
             border-radius: 10px;
+            box-sizing: border-box;
             box-shadow: 0px 0px 10px #cccccc;
         }
 
@@ -35,13 +44,6 @@
             padding: 10px;
             margin-top: 5px;
             box-sizing: border-box;
-        }
-
-        .product {
-            margin: 10px 0;
-            padding: 10px;
-            background-color: #eeeeee;
-            border-radius: 5px;
         }
 
         button {
@@ -67,14 +69,7 @@
             text-align: center;
             font-weight: bold;
             font-size: 20px;
-        }
-
-        #show {
-            margin-top: 20px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border: 1px solid #cccccc;
-            border-radius: 5px;
+            overflow-wrap: anywhere;
         }
     </style>
 </head>
@@ -84,46 +79,59 @@
 <div class="container">
 
     <h1>Food and Drinks</h1>
-
-    <h2>Order Counter</h2>
+    <h2>SKU Generator</h2>
 
     <label for="category">Category</label>
-    <input type="text" id="category" placeholder="Example: Food">
+    <input type="text" id="category"
+           placeholder="Example: Food">
 
     <label for="product_name">Product</label>
-    <input type="text" id="product_name" placeholder="Example: Pizza">
+    <input type="text" id="product_name"
+           placeholder="Example: Pizza">
 
     <label for="quantity">Stock Quantity</label>
-    <input type="number" id="quantity" placeholder="Example: 20">
+    <input type="number" id="quantity"
+           placeholder="Example: 20" min="0" step="1">
 
     <button py-click="SKU_generator">Generate SKU</button>
 
-    <div id="sku_output">
-        Total Cost
-    </div>
+    <div id="sku_output">Your SKU will appear here.</div>
 
     <script type="py">
+from pyscript import document
 
-        from pyscript import display, document
-        
 def SKU_generator(e):
+    category = document.getElementById("category").value.strip()
+    product_name = document.getElementById("product_name").value.strip()
+    stock = document.getElementById("quantity").value.strip()
 
+    output = document.getElementById("sku_output")
 
-        category = document.getElementbyID('category').value
-        product_name = document.getElementbyID('product_name').value
-        stock = document.getElementbyID('quantity').value
+    # Check if all fields are filled
+    if not category or not product_name or not stock:
+        output.innerText = "Please fill in all fields."
+        return
+    try:
+        quantity = int(stock)
+        if quantity < 0:
+            output.innerText = "Stock cannot be negative."
+            return
+    except ValueError:
+        output.innerText = "Enter a whole number for stock."
+        return
+    sku = (
+        category[:3].upper()
+        + "-"
+        + product_name[:4].upper()
+        + "-"
+        + str(quantity)
+    )
 
-    sku = category[:3].upper() + "-" + product_name[:4].upper() + "-" + str(stock)
-
-    display("SKU: ", sku, target='sku_output')
-        
+    output.innerText = "SKU: " + sku
     </script>
 
-
-
-
-
-    
 </div>
+
 </body>
 </html>
+```
